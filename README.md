@@ -36,7 +36,7 @@ python --3
 1. Open a terminal or command prompt.
 2. Run the game using the command:
    ```bash
-   python tic_tac_toe_enhanced.py
+   python Main.py
    ```
 
 ### 🕹️ Gameplay Instructions
