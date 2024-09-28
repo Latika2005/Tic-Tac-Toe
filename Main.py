@@ -1,5 +1,4 @@
-import random
-
+import math
 
 def print_board(board):
     """Prints the current state of the board."""
@@ -32,10 +31,53 @@ def is_draw(board):
     return all(cell != " " for row in board for cell in row)
 
 
+def minimax(board, depth, is_maximizing):
+    """Implements the minimax algorithm to find the optimal move."""
+    winner = check_winner(board)
+    
+    if winner == "O":
+        return 1
+    elif winner == "X":
+        return -1
+    elif is_draw(board):
+        return 0
+
+    if is_maximizing:
+        best_score = -math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == " ":
+                    board[i][j] = "O"  # AI is 'O'
+                    score = minimax(board, depth + 1, False)
+                    board[i][j] = " "
+                    best_score = max(score, best_score)
+        return best_score
+    else:
+        best_score = math.inf
+        for i in range(3):
+            for j in range(3):
+                if board[i][j] == " ":
+                    board[i][j] = "X"  # Player is 'X'
+                    score = minimax(board, depth + 1, True)
+                    board[i][j] = " "
+                    best_score = min(score, best_score)
+        return best_score
+
+
 def get_computer_move(board):
-    """Returns a random move for the computer."""
-    empty_cells = [(i, j) for i in range(3) for j in range(3) if board[i][j] == " "]
-    return random.choice(empty_cells)
+    """Returns the best move for the computer using the minimax algorithm."""
+    best_score = -math.inf
+    best_move = None
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == " ":
+                board[i][j] = "O"  # AI is 'O'
+                score = minimax(board, 0, False)
+                board[i][j] = " "
+                if score > best_score:
+                    best_score = score
+                    best_move = (i, j)
+    return best_move
 
 
 def tic_tac_toe():
